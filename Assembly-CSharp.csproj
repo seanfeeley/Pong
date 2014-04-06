@@ -49,6 +49,11 @@
      <Compile Include="Assets\Ball.cs" />
      <Compile Include="Assets\EnemyRacket.cs" />
      <Compile Include="Assets\Racket.cs" />
+     <None Include="Assets\Standard Assets\Particles\Sources\Shaders\Particle Alpha Blend (Queue +100).shader" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="Assembly-UnityScript-firstpass.unityproj">
+      <Project>{9FAA8CB4-8D63-017D-18FF-6733F5747645}</Project>      <Name>Assembly-UnityScript-firstpass</Name>    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

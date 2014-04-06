@@ -1,14 +1,17 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System;
+using System;
 
 public class Ball : MonoBehaviour {
 	// Use this for initialization
 	private Vector3 direction;
 	private float speed;
-	
+	private GameObject looser;
+	private GameObject ball;
 	public int player_score=0;
 	public int cpu_score=0;
+	public int winning_score=5;
 	void Start () {
 		// set start direction
 		this.direction = new Vector3(1.0f, 0.0f, 0.0f).normalized;
@@ -18,24 +21,51 @@ public class Ball : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		// keep speed of 1
+
 		this.transform.position += direction * speed;
 		
 	
 	}
 
 	void reset(String who){
+		GameObject spload;
+		if (player_score <= winning_score && cpu_score<=winning_score)
+		{
 
-		if (who == "player") {
-						this.direction = new Vector3 (-1.0f, 0.0f, 0.0f).normalized;
-				}
-		else{
-			this.direction = new Vector3 (1.0f, 0.0f, 0.0f).normalized;
+			spload = Instantiate(Resources.Load("zexplosion"), this.transform.position, this.transform.rotation) as GameObject;
+			audio.Play ();
+			if (who == "player") {
+							this.direction = new Vector3 (-1.0f, 0.0f, 0.0f).normalized;
+					}
+			else{
+				this.direction = new Vector3 (1.0f, 0.0f, 0.0f).normalized;
+			}
+			this.transform.position = new Vector3(0.0f, 0.0f, 0.0f);
+			this.speed = 0.3f;
 		}
-		this.transform.position = new Vector3(0.0f, 0.0f, 0.0f);
-		print("HELLA "+who);
+		if (player_score==winning_score)
+		{
+			looser=GameObject.FindWithTag("enemy");
+			looser.audio.Play ();
+			spload = Instantiate(Resources.Load("zexplosion"), looser.transform.position, looser.transform.rotation) as GameObject;
+			Destroy (looser);
 		}
+		
+		if (cpu_score==winning_score)
+		{
+			looser=GameObject.FindWithTag("Player");
+			looser.audio.Play ();
+			spload = Instantiate(Resources.Load("zexplosion"), looser.transform.position, looser.transform.rotation) as GameObject;
+			Destroy (looser);
+		}
+
+
+		}
+
 
 	void OnCollisionEnter(Collision collision){
+		AudioSource[] audios = GetComponents<AudioSource>();
+		audios [1].Play ();
 		Vector3 normal = collision.contacts[0].normal;
 		direction = Vector3.Reflect(direction, normal);
 		this.speed = this.speed + 0.01f;
