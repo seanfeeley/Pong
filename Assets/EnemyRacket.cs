@@ -10,7 +10,7 @@ public class EnemyRacket : MonoBehaviour {
 	}
 	
 	Vector3 move = Vector3.zero;
-	float speed = 4.0f;
+	float speed = 6.0f;
 	
 	void Update(){
 		Transform ball;
@@ -30,9 +30,9 @@ public class EnemyRacket : MonoBehaviour {
 		}
 
 		transform.position += move * Time.deltaTime;
-		transform.position = new Vector3(18.0f,0.0f,Mathf.Clamp (transform.position.z, -6, 6));
+		transform.position = new Vector3(23.5f,0.0f,Mathf.Clamp (transform.position.z, -16, 16));
 
-		if (transform.position.z == 6 || transform.position.z == -6) {
+		if (transform.position.z == 16 || transform.position.z == -16) {
 			transform.rotation = Quaternion.identity;
 				}
 						

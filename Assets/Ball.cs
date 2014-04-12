@@ -11,7 +11,7 @@ public class Ball : MonoBehaviour {
 	private GameObject ball;
 	public int player_score=0;
 	public int cpu_score=0;
-	public int winning_score=5;
+	public int winning_score=3;
 	void Start () {
 		// set start direction
 		this.direction = new Vector3(1.0f, 0.0f, 0.0f).normalized;
@@ -21,8 +21,9 @@ public class Ball : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		// keep speed of 1
-
-		this.transform.position += direction * speed;
+		if (player_score < winning_score && cpu_score < winning_score) {
+						this.transform.position += direction * speed;
+				}
 		
 	
 	}
@@ -33,7 +34,7 @@ public class Ball : MonoBehaviour {
 		{
 
 			spload = Instantiate(Resources.Load("zexplosion"), this.transform.position, this.transform.rotation) as GameObject;
-			audio.Play ();
+//			
 			if (who == "player") {
 							this.direction = new Vector3 (-1.0f, 0.0f, 0.0f).normalized;
 					}
@@ -46,16 +47,18 @@ public class Ball : MonoBehaviour {
 		if (player_score==winning_score)
 		{
 			looser=GameObject.FindWithTag("enemy");
-			looser.audio.Play ();
-			spload = Instantiate(Resources.Load("zexplosion"), looser.transform.position, looser.transform.rotation) as GameObject;
+//			looser.audio.Play ();
+			spload = Instantiate(Resources.Load("yexplosion"), looser.transform.position, looser.transform.rotation) as GameObject;
+			spload = Instantiate(Resources.Load("winText")) as GameObject;
 			Destroy (looser);
 		}
 		
 		if (cpu_score==winning_score)
 		{
 			looser=GameObject.FindWithTag("Player");
-			looser.audio.Play ();
-			spload = Instantiate(Resources.Load("zexplosion"), looser.transform.position, looser.transform.rotation) as GameObject;
+//			looser.audio.Play ();
+			spload = Instantiate(Resources.Load("yexplosion"), looser.transform.position, looser.transform.rotation) as GameObject;
+			spload = Instantiate(Resources.Load("loseText")) as GameObject;
 			Destroy (looser);
 		}
 
@@ -64,23 +67,29 @@ public class Ball : MonoBehaviour {
 
 
 	void OnCollisionEnter(Collision collision){
+
 		AudioSource[] audios = GetComponents<AudioSource>();
-		audios [1].Play ();
+//		audios [1].Play ();
 		Vector3 normal = collision.contacts[0].normal;
 		direction = Vector3.Reflect(direction, normal);
 		this.speed = this.speed + 0.01f;
 		//inverse velocity
 //		rigidbody.velocity = rigidbody.velocity * -2.0f;
-		if (collision.collider.name == "BorderLeft"){
-			player_score=player_score+1;
-			reset ("player");
-		}
-		else if (collision.collider.name == "BorderRight"){
-			cpu_score=cpu_score+1;
-			reset("cpu");
-		}
-		TextMesh t = (TextMesh)(FindObjectOfType(typeof(TextMesh)));
-		t.text = player_score+" : "+ cpu_score;
+		if (collision.collider.name == "BorderLeft") {
+						player_score = player_score + 1;
+						reset ("player");
+				} 
+		else if (collision.collider.name == "BorderRight") {
+						cpu_score = cpu_score + 1;
+						reset ("cpu");
+				} 
+		else {
+			audio.Play ();
+				}
+
+		GameObject a = GameObject.Find ("scoreText");
+		TextMesh textMesh = (TextMesh) a.GetComponent (typeof(TextMesh));
+		textMesh.text = player_score+" : "+ cpu_score;
 
 
 //		else if (collision.collider.name == "BorderTop"){
